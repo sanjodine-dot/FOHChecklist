@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sanjo · Opening / Closing</title>
+<style>
+:root{--cream:#FBF8F3;--cream-dim:#F2EDE3;--gold:#9D6610;--gold-soft:#C9954A;--red:#EC2227;--ink:#2B2420;--ink-soft:#6B5F52;--line:#E3D9C8;--shadow:0 1px 3px rgba(43,36,32,.07);}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:32px;}
+header{background:var(--ink);color:var(--cream);padding:18px 20px 16px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.brand-name{font-family:'EB Garamond',Georgia,serif;font-size:22px;letter-spacing:.06em;font-weight:600;}
+.brand-name span{color:var(--gold-soft);}
+.tab-switch{display:flex;margin-top:14px;background:rgba(255,255,255,.08);border-radius:10px;padding:3px;gap:3px;}
+.tab-btn{flex:1;text-align:center;padding:9px 0;font-size:14px;font-weight:600;letter-spacing:.02em;color:rgba(251,248,243,.55);border-radius:8px;cursor:pointer;transition:all .15s ease;user-select:none;}
+.tab-btn.active{background:var(--cream);color:var(--ink);}
+.page-head{padding:18px 20px 8px;}
+.page-title{font-family:'EB Garamond',Georgia,serif;font-size:24px;font-weight:600;color:var(--ink);}
+.list{padding:10px 16px 10px;}
+.item{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:9px;box-shadow:var(--shadow);}
+.num{flex:0 0 22px;height:22px;border-radius:50%;background:var(--cream-dim);color:var(--gold);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.body{flex:1;}
+.task{font-size:15px;font-weight:600;color:var(--ink);line-height:1.35;}
+.details{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.4;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.chip{font-size:11px;font-weight:600;padding:2.5px 8px;border-radius:6px;}
+.chip-when{background:#F3E9D8;color:#8A6326;}
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand-name">SANJO <span>SUSHI</span></div>
+  <div class="tab-switch">
+    <div class="tab-btn active" data-tab="opening">OPENING</div>
+    <div class="tab-btn" data-tab="closing">CLOSING</div>
+  </div>
+</header>
+
+<div id="page-opening">
+  <div class="page-head"><div class="page-title">Opening Checklist</div></div>
+  <div class="list" id="openingList"></div>
+</div>
+
+<div id="page-closing" class="hidden">
+  <div class="page-head"><div class="page-title">Closing Checklist</div></div>
+  <div class="list" id="closingList"></div>
+</div>
+
+<script>
+const openingItems = [
+  {n:1, task:"Turn on all office computers & tablets", details:"Office PC, Online, Delivery & Server tablets", when:"by 11:00 AM"},
+  {n:2, task:"Turn on dining music & power on the Bluetooth speaker"},
+  {n:3, task:"Set the dining tables", details:"Put out soy sauce; check chopsticks, napkins & soy dishes"},
+  {n:4, task:"Fill the teapot with tea", details:"Drop 2 tea balls into the water tank"},
+  {n:5, task:"Put out miso — both to-go and dine-in"},
+  {n:6, task:"Restock the drink fridge & refill to-go sauces", details:"Chili, karaage & vegan mayo"},
+  {n:7, task:"Check dining cleanliness", details:"Wipe down tables and chairs with a cloth"},
+  {n:8, task:"Check the washroom", details:"Refill toilet paper & hand soap; check trash and floor"},
+  {n:9, task:"Straighten the customer menus & wipe each one"},
+  {n:10, task:"Count the till — confirm $200"},
+  {n:11, task:"Turn on the OPEN sign & put out the A-board", details:"At 11:30 sharp", when:"11:30 AM"},
+  {n:12, task:"Turn on the yellow ceiling lights", details:"Remote is by the front bar"},
+  {n:13, task:"Check yesterday's sold-out items on the tablet", details:"e.g. tuna belly, spring roll"},
+  {n:14, task:"Restock the server bar", details:"Chopsticks, to-go bags, to-go container lids, etc."},
+];
+
+const closingItems = [
+  {n:1,  task:"Clean the washroom", when:"7:45 PM"},
+  {n:2,  task:"Refill the dining soy sauce", details:"Collect bottles, refill into clean ones, dishwash the empties (hand-wash the lids)"},
+  {n:3,  task:"Unplug the tea & miso pots", when:"8:00 PM"},
+  {n:4,  task:"Plug the store phone in to charge"},
+  {n:5,  task:"Reset the customer kettles", details:"Fill one to the top, dump the rest, dishwash the tea strainer"},
+  {n:6,  task:"Wipe around the miso pot & combine miso into one"},
+  {n:7,  task:"Ask the tables for last call", when:"8:30 PM"},
+  {n:8,  task:"Turn off the OPEN sign & bring in the A-board", when:"after 8:30 PM"},
+  {n:9,  task:"Sweep & mop from the back door forward", details:"Including the washroom"},
+  {n:10, task:"Take the recycling (bottles & cans) outside"},
+  {n:11, task:"Once all guests leave, sweep & mop the dining floor"},
+  {n:12, task:"Hand the day's used cloths to the sushi bar"},
+  {n:13, task:"Empty the customer teapots & run them through the dishwasher"},
+  {n:14, task:"Put all soy sauce & cup miso in the fridge"},
+  {n:15, task:"Put the big leftover miso bowl in the fridge", details:"Dishwash the ladle"},
+  {n:16, task:"Turn off the yellow ceiling lights with the remote"},
+  {n:17, task:"Turn off the music"},
+  {n:18, task:"Reconcile the till to $200 & close out"},
+  {n:19, task:"Final cleanliness check of dining floor & washroom, then clock out"},
+];
+
+function renderList(elId, items){
+  document.getElementById(elId).innerHTML = items.map(it => `
+    <div class="item">
+      <div class="num">${it.n}</div>
+      <div class="body">
+        <div class="task">${it.task}</div>
+        ${it.details ? `<div class="details">${it.details}</div>` : ''}
+        ${it.when ? `<div class="chips"><span class="chip chip-when">⏱ ${it.when}</span></div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+renderList('openingList', openingItems);
+renderList('closingList', closingItems);
+
+let activeTab = 'opening';
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTab = btn.getAttribute('data-tab');
+    document.getElementById('page-opening').classList.toggle('hidden', activeTab !== 'opening');
+    document.getElementById('page-closing').classList.toggle('hidden', activeTab !== 'closing');
+    window.scrollTo(0,0);
+  });
+});
+</script>
+</body>
+</html>
