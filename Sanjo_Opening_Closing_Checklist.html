@@ -10,8 +10,12 @@
 html,body{margin:0;padding:0;}
 body{background:var(--cream);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:32px;}
 header{background:var(--ink);color:var(--cream);padding:18px 20px 16px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.header-top{display:flex;align-items:center;justify-content:space-between;}
 .brand-name{font-family:'EB Garamond',Georgia,serif;font-size:22px;letter-spacing:.06em;font-weight:600;}
 .brand-name span{color:var(--gold-soft);}
+.lang-toggle{display:flex;background:rgba(255,255,255,.1);border-radius:8px;padding:2px;gap:2px;}
+.lang-btn{padding:5px 11px;font-size:12px;font-weight:700;letter-spacing:.04em;color:rgba(251,248,243,.5);border-radius:6px;cursor:pointer;transition:all .15s ease;user-select:none;}
+.lang-btn.active{background:var(--gold-soft);color:var(--ink);}
 .tab-switch{display:flex;margin-top:14px;background:rgba(255,255,255,.08);border-radius:10px;padding:3px;gap:3px;}
 .tab-btn{flex:1;text-align:center;padding:9px 0;font-size:14px;font-weight:600;letter-spacing:.02em;color:rgba(251,248,243,.55);border-radius:8px;cursor:pointer;transition:all .15s ease;user-select:none;}
 .tab-btn.active{background:var(--cream);color:var(--ink);}
@@ -31,78 +35,184 @@ header{background:var(--ink);color:var(--cream);padding:18px 20px 16px;position:
 </head>
 <body>
 <header>
-  <div class="brand-name">SANJO <span>SUSHI</span></div>
+  <div class="header-top">
+    <div class="brand-name">SANJO <span>SUSHI</span></div>
+    <div class="lang-toggle">
+      <div class="lang-btn active" data-lang="en">EN</div>
+      <div class="lang-btn" data-lang="kr">한국어</div>
+    </div>
+  </div>
   <div class="tab-switch">
-    <div class="tab-btn active" data-tab="opening">OPENING</div>
-    <div class="tab-btn" data-tab="closing">CLOSING</div>
+    <div class="tab-btn active" data-tab="opening" data-en="OPENING" data-kr="오프닝">OPENING</div>
+    <div class="tab-btn" data-tab="closing" data-en="CLOSING" data-kr="클로징">CLOSING</div>
   </div>
 </header>
 
 <div id="page-opening">
-  <div class="page-head"><div class="page-title">Opening Checklist</div></div>
+  <div class="page-head"><div class="page-title" data-en="Opening Checklist" data-kr="오프닝 체크리스트">Opening Checklist</div></div>
   <div class="list" id="openingList"></div>
 </div>
 
 <div id="page-closing" class="hidden">
-  <div class="page-head"><div class="page-title">Closing Checklist</div></div>
+  <div class="page-head"><div class="page-title" data-en="Closing Checklist" data-kr="클로징 체크리스트">Closing Checklist</div></div>
   <div class="list" id="closingList"></div>
 </div>
 
 <script>
 const openingItems = [
-  {n:1, task:"Turn on all office computers & tablets", details:"Office PC, Online, Delivery & Server tablets", when:"by 11:00 AM"},
-  {n:2, task:"Turn on dining music & power on the Bluetooth speaker"},
-  {n:3, task:"Set the dining tables", details:"Put out soy sauce; check chopsticks, napkins & soy dishes"},
-  {n:4, task:"Fill the teapot with tea", details:"Drop 2 tea balls into the water tank"},
-  {n:5, task:"Put out miso — both to-go and dine-in"},
-  {n:6, task:"Restock the drink fridge & refill to-go sauces", details:"Chili, karaage & vegan mayo"},
-  {n:7, task:"Check dining cleanliness", details:"Wipe down tables and chairs with a cloth"},
-  {n:8, task:"Check the washroom", details:"Refill toilet paper & hand soap; check trash and floor"},
-  {n:9, task:"Straighten the customer menus & wipe each one"},
-  {n:10, task:"Count the till — confirm $200"},
-  {n:11, task:"Turn on the OPEN sign & put out the A-board", details:"At 11:30 sharp", when:"11:30 AM"},
-  {n:12, task:"Turn on the yellow ceiling lights", details:"Remote is by the front bar"},
-  {n:13, task:"Check yesterday's sold-out items on the tablet", details:"e.g. tuna belly, spring roll"},
-  {n:14, task:"Restock the server bar", details:"Chopsticks, to-go bags, to-go container lids, etc."},
+  {n:1,
+    en:{task:"Turn on all computers & tablets", details:"Office PC, Online, Delivery & Server tablets"},
+    kr:{task:"컴퓨터 & 태블릿 모두 켜기", details:"오피스 PC, 온라인, 배달, 서버 태블릿"},
+    when:"by 11:00 AM"},
+  {n:2,
+    en:{task:"Turn on the Bluetooth speaker & play dining music"},
+    kr:{task:"블루투스 스피커 켜고 홀 음악 틀기"}},
+  {n:3,
+    en:{task:"Set the dining tables", details:"Put out soy sauce; check chopsticks, napkins & soy dishes"},
+    kr:{task:"테이블 세팅", details:"간장, 젓가락, 냅킨, 간장 종지 확인"}},
+  {n:4,
+    en:{task:"Fill the teapot with tea", details:"Drop 2 tea balls into the water tank"},
+    kr:{task:"티포트에 차 채우기", details:"티볼 2개 넣기"}},
+  {n:5,
+    en:{task:"Put out miso — both to-go and dine-in"},
+    kr:{task:"포장·매장용 미소 준비"}},
+  {n:6,
+    en:{task:"Restock the drink fridge & refill to-go sauces", details:"Chili, karaage & vegan mayo"},
+    kr:{task:"음료 냉장고 채우기 & 포장 소스 보충", details:"칠리, 가라아게, 비건 마요"}},
+  {n:7,
+    en:{task:"Check dining cleanliness", details:"Wipe down tables and chairs with a cloth"},
+    kr:{task:"홀 청결 점검", details:"테이블·의자 행주로 닦기"}},
+  {n:8,
+    en:{task:"Check the washroom", details:"Refill toilet paper & hand soap; check trash and floor"},
+    kr:{task:"화장실 점검", details:"화장지·핸드솝 보충, 쓰레기통·바닥 확인"}},
+  {n:9,
+    en:{task:"Straighten the customer menus & wipe each one"},
+    kr:{task:"메뉴판 정리·닦기"}},
+  {n:10,
+    en:{task:"Count the till — confirm $200"},
+    kr:{task:"시재금 확인 — $200 맞추기"}},
+  {n:11,
+    en:{task:"Turn on the OPEN sign & put out the A-board", details:"At 11:30 sharp"},
+    kr:{task:"오픈 사인 켜고 A보드 내놓기", details:"11:30 정각"},
+    when:"11:30 AM"},
+  {n:12,
+    en:{task:"Turn on the yellow ceiling lights", details:"Remote is by the front bar"},
+    kr:{task:"노란 천장 조명 켜기", details:"리모컨은 프론트 바 옆"}},
+  {n:13,
+    en:{task:"Check yesterday's sold-out items with the chef & update the tablet"},
+    kr:{task:"어제 품절 항목 셰프님께 확인 후 태블릿 업데이트"}},
+  {n:14,
+    en:{task:"Restock the server station", details:"Chopsticks, to-go bags, to-go container lids, etc."},
+    kr:{task:"서버 스테이션 채우기", details:"젓가락, 포장백, 포장 용기 뚜껑 등"}},
 ];
 
 const closingItems = [
-  {n:1,  task:"Clean the washroom", when:"7:45 PM"},
-  {n:2,  task:"Refill the dining soy sauce", details:"Collect bottles, refill into clean ones, dishwash the empties (hand-wash the lids)"},
-  {n:3,  task:"Unplug the tea & miso pots", when:"8:00 PM"},
-  {n:4,  task:"Plug the store phone in to charge"},
-  {n:5,  task:"Reset the customer kettles", details:"Fill one to the top, dump the rest, dishwash the tea strainer"},
-  {n:6,  task:"Wipe around the miso pot & combine miso into one"},
-  {n:7,  task:"Ask the tables for last call", when:"8:30 PM"},
-  {n:8,  task:"Turn off the OPEN sign & bring in the A-board", when:"after 8:30 PM"},
-  {n:9,  task:"Sweep & mop from the back door forward", details:"Including the washroom"},
-  {n:10, task:"Take the recycling (bottles & cans) outside"},
-  {n:11, task:"Once all guests leave, sweep & mop the dining floor"},
-  {n:12, task:"Hand the day's used cloths to the sushi bar"},
-  {n:13, task:"Empty the customer teapots & run them through the dishwasher"},
-  {n:14, task:"Put all soy sauce & cup miso in the fridge"},
-  {n:15, task:"Put the big leftover miso bowl in the fridge", details:"Dishwash the ladle"},
-  {n:16, task:"Turn off the yellow ceiling lights with the remote"},
-  {n:17, task:"Turn off the music"},
-  {n:18, task:"Reconcile the till to $200 & close out"},
-  {n:19, task:"Final cleanliness check of dining floor & washroom, then clock out"},
+  {n:1,
+    en:{task:"Clean the washroom"},
+    kr:{task:"화장실 청소"},
+    when:"7:45 PM"},
+  {n:2,
+    en:{task:"Refill the dining soy sauce", details:"Collect soy sauce bottles, drain & filter into the large jar, then dishwash the bottles (hand-wash the lids)"},
+    kr:{task:"간장 보충", details:"간장 병 모아서 큰 jar에 필터하며 옮기고, 간장 병은 식기세척기·뚜껑은 손세척"}},
+  {n:3,
+    en:{task:"Unplug the tea & miso warmer"},
+    kr:{task:"티포트 & 미소 워머 플러그 뽑기"},
+    when:"8:00 PM"},
+  {n:4,
+    en:{task:"Plug the store phone in to charge"},
+    kr:{task:"매장 전화기 충전 꽂아두기"}},
+  {n:5,
+    en:{task:"Refill & reset the customer kettle", details:"Fill the customer kettle to full; empty the teapot & tea strainer and dishwash them"},
+    kr:{task:"손님용 주전자 꽉 채우기", details:"티포트 & 차 거름망 비워서 식기세척기 돌리기"}},
+  {n:6,
+    en:{task:"Wipe around the miso pot & combine miso into one"},
+    kr:{task:"미소 포트 주변 닦고 미소 한 통으로 합치기"}},
+  {n:7,
+    en:{task:"Ask customers for last call"},
+    kr:{task:"손님들께 라스트 오더 받기"},
+    when:"8:30 PM"},
+  {n:8,
+    en:{task:"Turn off the OPEN sign & bring in the A-board"},
+    kr:{task:"오픈 사인 끄고 A보드 들여놓기"},
+    when:"after 8:30 PM"},
+  {n:9,
+    en:{task:"Sweep & mop from the back door forward", details:"Including the washroom"},
+    kr:{task:"뒷문부터 앞으로 쓸고 닦기", details:"화장실 포함"}},
+  {n:10,
+    en:{task:"Take the recycling (bottles & cans) outside"},
+    kr:{task:"재활용 (병·캔) 밖에 내놓기"}},
+  {n:11,
+    en:{task:"Once all guests leave, sweep & mop the dining floor"},
+    kr:{task:"손님 전원 퇴장 후 홀 바닥 쓸고 닦기"}},
+  {n:12,
+    en:{task:"Hand the day's used cloths to the sushi bar"},
+    kr:{task:"오늘 쓴 행주 스시 바에 넘기기"}},
+  {n:13,
+    en:{task:"Empty the customer kettle & dishwash it"},
+    kr:{task:"손님용 주전자 비우고 식기세척기 돌리기"}},
+  {n:14,
+    en:{task:"Put all soy sauce & miso (to-go and dine-in) in the fridge"},
+    kr:{task:"간장 & 미소 (포장·매장용) 전부 냉장고에 넣기"}},
+  {n:15,
+    en:{task:"Put the miso pot in the fridge", details:"Dishwash the ladle"},
+    kr:{task:"미소 포트 냉장고에 넣기", details:"국자 설거지"}},
+  {n:16,
+    en:{task:"Turn off the yellow ceiling lights with the remote"},
+    kr:{task:"리모컨으로 노란 조명 끄기"}},
+  {n:17,
+    en:{task:"Turn off the music"},
+    kr:{task:"음악 끄기"}},
+  {n:18,
+    en:{task:"Reconcile the till to $200 & close out"},
+    kr:{task:"시재금 $200 맞추고 마감 처리"}},
+  {n:19,
+    en:{task:"Final cleanliness check of dining floor & washroom, then clock out"},
+    kr:{task:"홀 바닥 & 화장실 최종 확인 후 퇴근"}},
 ];
 
+let currentLang = 'en';
+
 function renderList(elId, items){
-  document.getElementById(elId).innerHTML = items.map(it => `
+  document.getElementById(elId).innerHTML = items.map(it => {
+    const content = it[currentLang] || it.en;
+    return `
     <div class="item">
       <div class="num">${it.n}</div>
       <div class="body">
-        <div class="task">${it.task}</div>
-        ${it.details ? `<div class="details">${it.details}</div>` : ''}
+        <div class="task">${content.task}</div>
+        ${content.details ? `<div class="details">${content.details}</div>` : ''}
         ${it.when ? `<div class="chips"><span class="chip chip-when">⏱ ${it.when}</span></div>` : ''}
       </div>
     </div>
-  `).join('');
+  `}).join('');
 }
-renderList('openingList', openingItems);
-renderList('closingList', closingItems);
 
+function renderAll(){
+  renderList('openingList', openingItems);
+  renderList('closingList', closingItems);
+  // update page titles
+  document.querySelectorAll('[data-en]').forEach(el => {
+    if(el.classList.contains('tab-btn')) {
+      el.textContent = el.getAttribute('data-' + currentLang);
+    } else if(el.classList.contains('page-title')) {
+      el.textContent = el.getAttribute('data-' + currentLang);
+    }
+  });
+}
+
+renderAll();
+
+// lang toggle
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLang = btn.getAttribute('data-lang');
+    renderAll();
+  });
+});
+
+// tab switch
 let activeTab = 'opening';
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
